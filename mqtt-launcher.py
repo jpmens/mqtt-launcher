@@ -49,7 +49,12 @@ class Config(object):
     def get(self, key, default=None):
         return self.config.get(key, default)
 
-cf = Config()
+try:
+    cf = Config()
+except Exception, e:
+    print "Cannot load configuration from file %s: %s" % (CONFIG, str(e))
+    sys.exit(2)
+
 LOGFILE = cf.get('logfile', 'logfile')
 LOGFORMAT = '%(asctime)-15s %(message)s'
 DEBUG=True
