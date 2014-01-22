@@ -1,0 +1,26 @@
+
+logfile = 'logfile'
+mqtt_broker = 'localhost'       # default: 'localhost'
+mqtt_port = 1883                # default: 1883
+mqtt_clientid = 'mqtt-launcher-1'
+# mqtt_username = 'jane'
+# mqtt_password = 'secret'
+
+topiclist = {
+
+    # topic                     payload value       program & arguments
+    "sys/file"          :   {
+                                'create'        :   [ '/usr/bin/touch', '/tmp/file.one' ],
+                                'false'         :   [ '/bin/rm', '-f', '/tmp/file.one'    ],
+                                'info'          :   [ '/bin/ls', '-l', '/tmp/file.one' ],
+                            },
+    "prog/pwd"          :   {
+                                None            :   [ 'pwd' ],
+                            },
+    "dev/1"             :   {
+                                None            :   [ 'ls', '-l', '/' ],
+                            },
+    "dev/2"             :   {
+                                None            :   [ "/bin/echo", "111", "*", "@!@", "222", "@!@", "333" ],
+                            },
+}
