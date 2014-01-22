@@ -94,6 +94,8 @@ _mqtt-launcher_ logs its operation in the file configured as `logfile`.
 
 ## Credits
 
-This program was inspired by [mqtt-exec](https://github.com/denschu/mqtt-exec). I'm not terribly comfortable running NodeJS programs, so I implemented the idea in Python.
+This program was inspired by two related tools:
+* Peter van Dijk's [mqtt-spawn](https://github.com/PowerDNS/mqtt-spawn)
+* Dennis Schulte's [mqtt-exec](https://github.com/denschu/mqtt-exec). (I'm not terribly comfortable running NodeJS programs, so I implemented the idea in Python.)
 
  [MQTT]: http://mqtt.org
