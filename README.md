@@ -16,7 +16,7 @@ The configuration file must be valid Python and it is loaded once. It contains
 the topic / process associations.
 
 ```python
-# topic                     payload value       program & arguments
+# topic         payload value           program & arguments
 "sys/file"  :   {
                     'create'        :   [ '/usr/bin/touch', '/tmp/file.one' ],
                     'false'         :   [ '/bin/rm', '-f', '/tmp/file.one'    ],
@@ -32,6 +32,8 @@ Above snippet instructs _mqtt-launcher_ to:
   * if the payload is the string `false`, remove a file
   * if the payload is `info`, return information on the file
 
+The payload value may be `None` in which case the payload content is ignored.
+
 _mqtt-launcher_ publishes _stdout_ and _stderr_ of the launched program
 to the configured topic with `/report` added to it. So, in the example
 above, a non-retained message will be published to `sys/file/report`.
@@ -44,7 +46,7 @@ Here's the obligatory "screenshot".
 
 ```
 Publishes					Subscribes
------------------------------------		------------------------------------------------------------------
+-----------------------		------------------------------------------------------------------
 						$ mosquitto_sub -v -t 'dev/#' -t 'sys/file/#' -t 'prog/#' 
 
 
