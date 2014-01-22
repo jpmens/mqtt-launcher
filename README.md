@@ -32,7 +32,9 @@ Above snippet instructs _mqtt-launcher_ to:
   * if the payload is the string `false`, remove a file
   * if the payload is `info`, return information on the file
 
-The payload value may be `None` in which case the payload content is ignored.
+The payload value may be `None` in which case the eacho of the list elements
+defining the program and arguments are checked for the magic string `@!@` which
+is replaced by the payload contents. (See example published at `dev/2` below.)
 
 _mqtt-launcher_ publishes _stdout_ and _stderr_ of the launched program
 to the configured topic with `/report` added to it. So, in the example
@@ -75,6 +77,9 @@ mosquitto_pub -t dev/1 -m hi
 						drwxrwxr-x@   8 root  admin      272 Jan 25  2013 Developer
 						drwxr-xr-x+  72 root  wheel     2448 Oct 14 10:54 Library
 						...
+mosquitto_pub -t dev/2 -m 'Hi Jane!'
+						dev/2 Hi Jane!
+						dev/2/report 111 * Hi Jane! 222 Hi Jane! 333
 ```
 
 ## Configuration
