@@ -34,7 +34,8 @@ import os
 import sys
 import subprocess
 import logging
-import mosquitto
+import paho.mqtt.client as paho   # pip install paho-mqtt
+import time
 import socket
 import string
 
@@ -108,6 +109,11 @@ def on_message(mosq, userdata, msg):
 
     runprog(msg.topic, str(msg.payload))
 
+def on_connect(mosq, userdata, result_code):
+    logging.debug("Connected to MQTT broker, subscribing to topics...")
+    for topic in topiclist:
+        mqttc.subscribe(topic, qos)
+
 
 def on_disconnect(mosq, userdata, rc):
     logging.debug("OOOOPS! launcher disconnects")
@@ -124,16 +130,20 @@ if __name__ == '__main__':
         sys.exit(2)
 
     clientid = cf.get('mqtt_clientid', 'mqtt-launcher-%s' % os.getpid())
-    mqttc = mosquitto.Mosquitto(clientid, userdata=userdata, clean_session=False)
+    # initialise MQTT broker connection
+    mqttc = paho.Client(clientid, clean_session=False)
+
+
     mqttc.on_message = on_message
+    mqttc.on_connect = on_connect
     mqttc.on_disconnect = on_disconnect
 
     mqttc.will_set('clients/mqtt-launcher', payload="Adios!", qos=0, retain=False)
 
     # Delays will be: 3, 6, 12, 24, 30, 30, ...
-    mqttc.reconnect_delay_set(delay=3, delay_max=30, exponential_backoff=True)
+    #mqttc.reconnect_delay_set(delay=3, delay_max=30, exponential_backoff=True)
 
-    mqttc.username_pw_set(cf.get('username'), cf.get('password'))
+    mqttc.username_pw_set(cf.get('mqtt_username'), cf.get('mqtt_password'))
 
     mqttc.connect(cf.get('mqtt_broker', 'localhost'), int(cf.get('mqtt_port', '1883')), 60)
 
