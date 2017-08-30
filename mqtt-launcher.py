@@ -109,7 +109,7 @@ def on_message(mosq, userdata, msg):
 
     runprog(msg.topic, str(msg.payload))
 
-def on_connect(mosq, userdata, result_code):
+def on_connect(mosq, userdata, flags, result_code):
     logging.debug("Connected to MQTT broker, subscribing to topics...")
     for topic in topiclist:
         mqttc.subscribe(topic, qos)
