@@ -143,7 +143,8 @@ if __name__ == '__main__':
     # Delays will be: 3, 6, 12, 24, 30, 30, ...
     #mqttc.reconnect_delay_set(delay=3, delay_max=30, exponential_backoff=True)
 
-    mqttc.username_pw_set(cf.get('mqtt_username'), cf.get('mqtt_password'))
+    if cf.get('mqtt_username') is not None:
+        mqttc.username_pw_set(cf.get('mqtt_username'), cf.get('mqtt_password'))
 
     mqttc.connect(cf.get('mqtt_broker', 'localhost'), int(cf.get('mqtt_port', '1883')), 60)
 
