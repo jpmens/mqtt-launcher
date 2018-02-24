@@ -95,7 +95,7 @@ _mqtt-launcher_ logs its operation in the file configured as `logfile`.
 ## Requirements
 
 * Python
-* [mosquitto.py](http://mosquitto.org/documentation/python/)
+* [paho-mqtt](https://pypi.python.org/pypi/paho-mqtt/1.3.1)
 
 ## Credits
 
