@@ -1,6 +1,6 @@
 
 logfile         = 'logfile'
-mqtt_broker     = 'localhost'       # default: 'localhost'
+mqtt_broker     = 'localhost'       # default: 'localhost'. If using TLS, this must be set to the domain name signed by your TLS certificate.
 mqtt_port       = 1883              # default: 1883
 mqtt_clientid   = 'mqtt-launcher-1'
 mqtt_username   = None
