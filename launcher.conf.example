@@ -1,10 +1,11 @@
 
-logfile = 'logfile'
-mqtt_broker = 'localhost'       # default: 'localhost'
-mqtt_port = 1883                # default: 1883
-mqtt_clientid = 'mqtt-launcher-1'
-mqtt_username = None
-mqtt_password = None
+logfile         = 'logfile'
+mqtt_broker     = 'localhost'       # default: 'localhost'
+mqtt_port       = 1883              # default: 1883
+mqtt_clientid   = 'mqtt-launcher-1'
+mqtt_username   = None
+mqtt_password   = None
+mqtt_tls        = 0                 # default: No TLS
 # mqtt_username = 'jane'
 # mqtt_password = 'secret'
 
