@@ -151,9 +151,6 @@ if __name__ == '__main__':
 
     mqttc.connect(cf.get('mqtt_broker', 'localhost'), int(cf.get('mqtt_port', '1883')), 60)
 
-    for topic in topiclist:
-        mqttc.subscribe(topic, qos)
-
     while True:
         try:
             mqttc.loop_forever()
