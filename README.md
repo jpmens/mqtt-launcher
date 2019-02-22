@@ -34,7 +34,7 @@ Above snippet instructs _mqtt-launcher_ to:
 
 The payload value may be `None` in which case the eacho of the list elements
 defining the program and arguments are checked for the magic string `@!@` which
-is replaced by the payload contents. (See example published at `dev/2` below.)
+is replaced by the payload contents. (See example published at `dev/2`, `dev/3` and `dev/4` below.)
 
 _mqtt-launcher_ publishes _stdout_ and _stderr_ of the launched program
 to the configured topic with `/report` added to it. So, in the example
@@ -80,6 +80,14 @@ mosquitto_pub -t dev/1 -m hi
 mosquitto_pub -t dev/2 -m 'Hi Jane!'
 						dev/2 Hi Jane!
 						dev/2/report 111 * Hi Jane! 222 Hi Jane! 333
+
+mosquitto_pub -t dev/3 -m 'foo-bar'
+						dev/3 foo-bar
+						dev/3/report foo-bar
+
+mosquitto_pub -t dev/4 -m 'foo/bar'
+						dev/4 foo/bar
+						dev/4/report var1=foo var2=bar
 ```
 
 ## Configuration
