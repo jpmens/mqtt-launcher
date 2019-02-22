@@ -85,7 +85,7 @@ mosquitto_pub -t dev/3 -m 'foo-bar'
 						dev/3 foo-bar
 						dev/3/report foo-bar
 
-mosquitto_pub -t dev/3 -m 'foo/bar'
+mosquitto_pub -t dev/4 -m 'foo/bar'
 						dev/4 foo/bar
 						dev/4/report var1=foo var2=bar
 ```
