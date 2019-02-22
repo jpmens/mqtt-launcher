@@ -81,10 +81,12 @@ mosquitto_pub -t dev/2 -m 'Hi Jane!'
 						dev/2 Hi Jane!
 						dev/2/report 111 * Hi Jane! 222 Hi Jane! 333
 
-mosquitto_pub -t dev/3 -m 'foo-bar'		dev/3 foo-bar
+mosquitto_pub -t dev/3 -m 'foo-bar'
+						dev/3 foo-bar
 						dev/3/report foo-bar
 
-mosquitto_pub -t dev/3 -m 'foo/bar'		dev/4 foo/bar
+mosquitto_pub -t dev/3 -m 'foo/bar'
+						dev/4 foo/bar
 						dev/4/report var1=foo var2=bar
 ```
 
