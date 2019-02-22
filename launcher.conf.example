@@ -26,4 +26,12 @@ topiclist = {
     "dev/2"             :   {
                                 None            :   [ "/bin/echo", "111", "*", "@!@", "222", "@!@", "333" ],
                             },
+    "dev/3"             :   {
+                                None            :   [ "/bin/sh", '-c', 'var=@!@; echo $var'],
+                            },
+    "dev/4"             :   {
+                                None            :   [ "/bin/bash", 
+                                                      '-c',
+                                                      'IFS="/" read -r var1 var2 <<< "@!@"; echo "var1=$var1 var2=$var2"'],
+                            },
 }
