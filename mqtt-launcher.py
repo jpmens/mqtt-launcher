@@ -45,15 +45,15 @@ CONFIG=os.getenv('MQTTLAUNCHERCONFIG', 'launcher.conf')
 class Config(object):
     def __init__(self, filename=CONFIG):
         self.config = {}
-        execfile(filename, self.config)
+        exec(compile(open(filename, "rb").read(), filename, 'exec'), self.config)
 
     def get(self, key, default=None):
         return self.config.get(key, default)
 
 try:
     cf = Config()
-except Exception, e:
-    print "Cannot load configuration from file %s: %s" % (CONFIG, str(e))
+except Exception as e:
+    print("Cannot load configuration from file %s: %s" % (CONFIG, str(e)))
     sys.exit(2)
 
 LOGFILE = cf.get('logfile', 'logfile')
@@ -93,7 +93,7 @@ def runprog(topic, param=None):
 
     try:
         res = subprocess.check_output(cmd, stdin=None, stderr=subprocess.STDOUT, shell=False, universal_newlines=True, cwd='/tmp')
-    except Exception, e:
+    except Exception as e:
         res = "*****> %s" % str(e)
 
     payload = res.rstrip('\n')
@@ -101,9 +101,9 @@ def runprog(topic, param=None):
 
 
 def on_message(mosq, userdata, msg):
-    logging.debug(msg.topic+" "+str(msg.qos)+" "+str(msg.payload))
+    logging.debug(msg.topic+" "+str(msg.qos)+" "+msg.payload.decode('utf-8'))
 
-    runprog(msg.topic, str(msg.payload))
+    runprog(msg.topic, msg.payload.decode('utf-8'))
 
 def on_connect(mosq, userdata, flags, result_code):
     logging.debug("Connected to MQTT broker, subscribing to topics...")
@@ -141,7 +141,7 @@ if __name__ == '__main__':
 
     if cf.get('mqtt_username') is not None:
         mqttc.username_pw_set(cf.get('mqtt_username'), cf.get('mqtt_password'))
-    
+
     if cf.get('mqtt_tls') is not None:
         mqttc.tls_set()
 
@@ -154,4 +154,3 @@ if __name__ == '__main__':
             time.sleep(5)
         except KeyboardInterrupt:
             sys.exit(0)
-
