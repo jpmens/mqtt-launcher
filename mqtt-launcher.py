@@ -126,9 +126,11 @@ if __name__ == '__main__':
         sys.exit(2)
 
     clientid = cf.get('mqtt_clientid', 'mqtt-launcher-%s' % os.getpid())
-    # initialise MQTT broker connection
-    mqttc = paho.Client(clientid, clean_session=False)
 
+    transportType = cf.get('mqtt_transport_type', 'tcp')
+
+    # initialise MQTT broker connection
+    mqttc = paho.Client(clientid, clean_session=False, transport=transportType)
 
     mqttc.on_message = on_message
     mqttc.on_connect = on_connect
@@ -144,6 +146,12 @@ if __name__ == '__main__':
 
     if cf.get('mqtt_tls') is not None:
         mqttc.tls_set()
+
+        if cf.get('mqtt_tls_verify') is not None:
+            mqttc.tls_insecure_set(False)
+
+    if transportType == 'websockets':
+        mqttc.ws_set_options(path="/ws")
 
     mqttc.connect(cf.get('mqtt_broker', 'localhost'), int(cf.get('mqtt_port', '1883')), 60)
 
