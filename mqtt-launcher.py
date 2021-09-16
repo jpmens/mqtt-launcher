@@ -147,7 +147,7 @@ if __name__ == '__main__':
     if cf.get('mqtt_tls') is not None:
         mqttc.tls_set()
 
-        if cf.get('mqtt_ssl_verify') is not None:
+        if cf.get('mqtt_tls_verify') is not None:
             mqttc.tls_insecure_set(False)
 
     if transportType == 'websockets':
