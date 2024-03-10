@@ -34,7 +34,7 @@ import os
 import sys
 import subprocess
 import logging
-import paho.mqtt.client as paho   # pip install paho-mqtt
+import paho.mqtt.client as paho # pip install paho-mqtt
 import time
 import socket
 import string
@@ -99,19 +99,22 @@ def runprog(topic, param=None):
     payload = res.rstrip('\n')
     (res, mid) =  mqttc.publish(publish, payload, qos=qos, retain=False)
 
+def on_connect(client, userdata, flags, reason_code, properties):
+    if reason_code == 0:
+        logging.debug("Connected to MQTT broker, subscribing to topics...")
+        for topic in topiclist:
+            mqttc.subscribe(topic, qos)
+    if reason_code > 0:
+        logging.debug("Connected with result code: %s", reason_code)
+        logging.debug("No connection. Aborting")
+        sys.exit(2)
 
-def on_message(mosq, userdata, msg):
+def on_message(client, userdata, msg):
     logging.debug(msg.topic+" "+str(msg.qos)+" "+msg.payload.decode('utf-8'))
 
     runprog(msg.topic, msg.payload.decode('utf-8'))
 
-def on_connect(mosq, userdata, flags, result_code):
-    logging.debug("Connected to MQTT broker, subscribing to topics...")
-    for topic in topiclist:
-        mqttc.subscribe(topic, qos)
-
-
-def on_disconnect(mosq, userdata, rc):
+def on_disconnect(client, userdata, flags, reason_code, properties):
     logging.debug("OOOOPS! launcher disconnects")
     time.sleep(10)
 
@@ -130,7 +133,7 @@ if __name__ == '__main__':
     transportType = cf.get('mqtt_transport_type', 'tcp')
 
     # initialise MQTT broker connection
-    mqttc = paho.Client(clientid, clean_session=False, transport=transportType)
+    mqttc = paho.Client(paho.CallbackAPIVersion.VERSION2, clientid, clean_session=True, transport=transportType)
 
     mqttc.on_message = on_message
     mqttc.on_connect = on_connect
@@ -157,7 +160,7 @@ if __name__ == '__main__':
 
     while True:
         try:
-            mqttc.loop_forever()
+            mqttc.loop_forever(retry_first_connection=False)
         except socket.error:
             time.sleep(5)
         except KeyboardInterrupt:
