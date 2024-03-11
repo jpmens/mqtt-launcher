@@ -104,6 +104,7 @@ def on_connect(client, userdata, flags, reason_code, properties):
         logging.debug("Connected to MQTT broker, subscribing to topics...")
         for topic in topiclist:
             mqttc.subscribe(topic, qos)
+            logging.debug("Subscribed to Topic \"%s\", QOS %s", topic, qos)
     if reason_code > 0:
         logging.debug("Connected with result code: %s", reason_code)
         logging.debug("No connection. Aborting")
@@ -133,7 +134,7 @@ if __name__ == '__main__':
     transportType = cf.get('mqtt_transport_type', 'tcp')
 
     # initialise MQTT broker connection
-    mqttc = paho.Client(paho.CallbackAPIVersion.VERSION2, clientid, clean_session=True, transport=transportType)
+    mqttc = paho.Client(paho.CallbackAPIVersion.VERSION2, clientid, clean_session=False, transport=transportType)
 
     mqttc.on_message = on_message
     mqttc.on_connect = on_connect
