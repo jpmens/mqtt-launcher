@@ -7,3 +7,5 @@ include/
 lib64
 lib/
 pyvenv.cfg
+*.crt
+*.log
