@@ -149,7 +149,10 @@ if __name__ == '__main__':
         mqttc.username_pw_set(cf.get('mqtt_username'), cf.get('mqtt_password'))
 
     if cf.get('mqtt_tls') is not None:
-        mqttc.tls_set()
+        if cf.get('mqtt_tls_ca') is not None:
+            mqttc.tls_set(ca_certs=cf.get('mqtt_tls_ca'))
+        else:
+            mqttc.tls_set()
 
         if cf.get('mqtt_tls_verify') is not None:
             mqttc.tls_insecure_set(False)

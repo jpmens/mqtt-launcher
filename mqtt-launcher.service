@@ -1,0 +1,14 @@
+[Unit]
+Description=mqtt-launcher
+After=network.target
+
+[Service]
+PermissionsStartOnly=true
+ExecStart=/bin/bash -c 'source /opt/mqtt-launcher/bin/activate; /opt/mqtt-launcher/mqtt-launcher.py'
+WorkingDirectory=/opt/mqtt-launcher
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
