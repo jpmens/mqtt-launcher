@@ -5,14 +5,14 @@ and executes processes on the host it's running on. Launchable processes are
 configured on a per/wildcard basis, and they can be constrained to run only if
 a particular text payload is contained in the message.
 
-For example, I can publish a message to my MQTT broker requesting _mqtt-launcher_ 
+For example, I can publish a message to my MQTT broker requesting _mqtt-launcher_
 create a particular semaphore file for me:
 
 ```
 mosquitto_pub -t sys/file -m create
 ```
 
-The configuration file must be valid Python and it is loaded once. It contains
+The configuration file(s) must be valid Python. Configuration is loaded once and contains
 the topic / process associations.
 
 ```python
@@ -49,7 +49,7 @@ Here's the obligatory "screenshot".
 ```
 Publishes					Subscribes
 -----------------------		------------------------------------------------------------------
-						$ mosquitto_sub -v -t 'dev/#' -t 'sys/file/#' -t 'prog/#' 
+						$ mosquitto_sub -v -t 'dev/#' -t 'sys/file/#' -t 'prog/#'
 
 
 mosquitto_pub -t prog/pwd -n
@@ -95,6 +95,18 @@ mosquitto_pub -t dev/4 -m 'foo/bar'
 _mqtt-launcher_ loads a Python configuration from the path contained in
 the environment variable `$MQTTLAUNCHERCONFIG`; if unset, the path
 defaults to `launcher.conf`. See the provided `launcher.conf.example`.
+
+Additional configuration files may be placed in a subdirectory of the
+main configuration file path. These are read in lexical order and merged
+into the final configuration, which allows for per-machine overrides and
+separate storage of settings like the broker password. The subdirectory
+must be named the same as the configuration file with a `.d` suffix. Example:
+```
+├── launcher.conf
+└── launcher.conf.d
+    ├── 10-password
+    └── 20-topics
+```
 
 ## Logging
 

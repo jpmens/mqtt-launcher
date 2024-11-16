@@ -32,6 +32,7 @@ __copyright__ = 'Copyright 2014 Jan-Piet Mens'
 
 import os
 import sys
+from pathlib import Path
 import subprocess
 import logging
 import paho.mqtt.client as paho # pip install paho-mqtt
@@ -43,9 +44,15 @@ qos=2
 CONFIG=os.getenv('MQTTLAUNCHERCONFIG', 'launcher.conf')
 
 class Config(object):
+
     def __init__(self, filename=CONFIG):
         self.config = {}
-        exec(compile(open(filename, "rb").read(), filename, 'exec'), self.config)
+        conf_dir = Path(f"{filename}.d")
+        conf_files = [filename] + (
+            sorted([f for f in conf_dir.iterdir() if f.is_file()]) if conf_dir.is_dir() else []
+        )
+        for conf_file in conf_files:
+            exec(compile(open(conf_file, "rb").read(), conf_file, "exec"), self.config)
 
     def get(self, key, default=None):
         return self.config.get(key, default)
@@ -53,7 +60,7 @@ class Config(object):
 try:
     cf = Config()
 except Exception as e:
-    print("Cannot load configuration from file %s: %s" % (CONFIG, str(e)))
+    print("Cannot load configuration from %s or %s.d subdirectory: %s" % (CONFIG, CONFIG, str(e)))
     sys.exit(2)
 
 LOGFILE = cf.get('logfile', 'logfile')
