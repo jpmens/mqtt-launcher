@@ -42,6 +42,7 @@ import string
 
 qos=2
 CONFIG=os.getenv('MQTTLAUNCHERCONFIG', 'launcher.conf')
+TOPIC_LIST_KEY='topiclist'
 
 class Config(object):
 
@@ -51,8 +52,11 @@ class Config(object):
         conf_files = [filename] + (
             sorted([f for f in conf_dir.iterdir() if f.is_file()]) if conf_dir.is_dir() else []
         )
+        merged_topics = {}
         for conf_file in conf_files:
             exec(compile(open(conf_file, "rb").read(), conf_file, "exec"), self.config)
+            merged_topics.update(self.config.get(TOPIC_LIST_KEY, {}))
+        self.config[TOPIC_LIST_KEY] = merged_topics
 
     def get(self, key, default=None):
         return self.config.get(key, default)
@@ -130,9 +134,9 @@ if __name__ == '__main__':
 
     userdata = {
     }
-    topiclist = cf.get('topiclist')
+    topiclist = cf.get(TOPIC_LIST_KEY)
 
-    if topiclist is None:
+    if not topiclist:
         logging.info("No topic list. Aborting")
         sys.exit(2)
 

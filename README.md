@@ -105,8 +105,13 @@ must be named the same as the configuration file with a `.d` suffix. Example:
 ├── launcher.conf
 └── launcher.conf.d
     ├── 10-password
-    └── 20-topics
+    ├── 20-topics-common
+    └── 30-topics-local
 ```
+
+If multiple files define their own `topiclist`, they are merged similarly.
+Topics from subsequent files override those with identical names in
+preceding ones.
 
 ## Logging
 
